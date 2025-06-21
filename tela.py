@@ -95,6 +95,9 @@ def verificar_vencedor(jogador):
         return jogador
 
 
+#apenas para testeAdd commentMore actions
+contador = 0
+
 if __name__ == "__main__":
     while running:
         for event in pygame.event.get():
@@ -112,13 +115,22 @@ if __name__ == "__main__":
                         [2, 1, 2],
                         [2, 0, 1]]
 
-        pygame.display.flip()    
+        if(contador%2==0):
+            matriz_jogo[0][0] = 1
+        else:
+            matriz_jogo[0][0] = 2
+        contador += 1
+        time.sleep(1)
+
+        pygame.display.flip()
         clock.tick(60)
 
         # Verifica quem ganhou
         if verificar_vencedor(1) == 1:   # X ganhou
-            break
+            # Sugestão: Implementar algo aqui para exibir quem venceu
+            continue
         elif verificar_vencedor(2) == 2: # O ganhou
-            break
+            # Sugestão: Implementar algo aqui para exibir quem venceu
+            continue
         
     pygame.quit()
