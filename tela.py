@@ -86,7 +86,7 @@ def verificar_vencedor(jogador):
             if sequencia_coluna == 3:
                 return jogador
     
-    # Verifica a principal
+    # Verifica a diagonal principal
     if matriz_jogo[0][0] == jogador and matriz_jogo[1][1] == jogador and matriz_jogo[2][2] == jogador:
         return jogador
     
@@ -95,7 +95,7 @@ def verificar_vencedor(jogador):
         return jogador
 
 
-#apenas para testeAdd commentMore actions
+#apenas para teste
 contador = 0
 
 if __name__ == "__main__":
