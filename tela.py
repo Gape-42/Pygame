@@ -95,42 +95,121 @@ def verificar_vencedor(jogador):
         return jogador
 
 
-#apenas para teste
-contador = 0
+def exibir_vencedor(vencedor):
+    fonte = pygame.font.SysFont(None, 72)
+    texto_vencedor = fonte.render(f'Jogador {vencedor} venceu!', True, "white")
 
-if __name__ == "__main__":
-    while running:
+    # Dimensões da caixa
+    largura_modal = 500
+    altura_modal = 320
+    x_modal = (resolucao_x - largura_modal) // 2
+    y_modal = (resolucao_y - altura_modal) // 2
+    modal_rect = pygame.Rect(x_modal, y_modal, largura_modal, altura_modal)
+
+    # Botão "Jogar Novamente"
+    largura_botao = 250
+    altura_botao = 60
+    x_botao_jogar_novamente = (resolucao_x - largura_botao) // 2
+    y_botao_jogar_novamente = (resolucao_y - altura_botao) // 2
+    botao_jogar_novamente = pygame.Rect(x_botao_jogar_novamente, y_botao_jogar_novamente, largura_botao, altura_botao)
+
+    # Botão "Sair"
+    x_botao_sair = (resolucao_x - largura_botao) // 2
+    y_botao_sair = (resolucao_y - altura_botao + 170) // 2
+    botao_sair = pygame.Rect(x_botao_sair, y_botao_sair, largura_botao, altura_botao)
+
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
+                exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if botao_jogar_novamente.collidepoint(event.pos):
+                    return  # Reinicia o jogo
+                elif botao_sair.collidepoint(event.pos):
+                    pygame.quit()
+                    exit()
 
-        # Chamada da função para desenhar o tabuleiro
+        # Desenha o tabuleiro por trás
         desenhar_tabuleiro()
-        
-        # Chamada da função para desenhar as jogadas
         desenhar_jogada()
-                    
-        # Apenas para testar a atualização da matriz
-        matriz_jogo = [[0, 0, 2],
-                        [2, 1, 2],
-                        [2, 0, 1]]
 
-        if(contador%2==0):
-            matriz_jogo[0][0] = 1
-        else:
-            matriz_jogo[0][0] = 2
-        contador += 1
-        time.sleep(1)
+        # Modal
+        pygame.draw.rect(tela, "gray10", modal_rect, border_radius=20)
+        pygame.draw.rect(tela, "white", modal_rect, width=5, border_radius=20)
+
+        # Texto do vencedor
+        tela.blit(texto_vencedor, (
+            x_modal + (largura_modal - texto_vencedor.get_width()) // 2,
+            y_modal + 40
+        ))
+
+        # Fonte dos botões
+        fonte_botao = pygame.font.SysFont(None, 40)
+
+        # Botão "Jogar Novamente"
+        pygame.draw.rect(tela, "green", botao_jogar_novamente, border_radius=10)
+        texto_jogar = fonte_botao.render("Jogar Novamente", True, "white")
+        tela.blit(texto_jogar, (
+            botao_jogar_novamente.x + (largura_botao - texto_jogar.get_width()) // 2,
+            botao_jogar_novamente.y + (altura_botao - texto_jogar.get_height()) // 2
+        ))
+
+        # Botão "Sair"
+        pygame.draw.rect(tela, "red", botao_sair, border_radius=10)
+        texto_sair = fonte_botao.render("Sair", True, "white")
+        tela.blit(texto_sair, (
+            botao_sair.x + (largura_botao - texto_sair.get_width()) // 2,
+            botao_sair.y + (altura_botao - texto_sair.get_height()) // 2
+        ))
 
         pygame.display.flip()
         clock.tick(60)
 
-        # Verifica quem ganhou
-        if verificar_vencedor(1) == 1:   # X ganhou
-            # Sugestão: Implementar algo aqui para exibir quem venceu
-            continue
-        elif verificar_vencedor(2) == 2: # O ganhou
-            # Sugestão: Implementar algo aqui para exibir quem venceu
-            continue
-        
-    pygame.quit()
+
+# Apenas para teste
+contador = 0
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Chamada da função para desenhar o tabuleiro
+    desenhar_tabuleiro()
+    
+    # Chamada da função para desenhar as jogadas
+    desenhar_jogada()
+    pygame.display.flip()
+                
+    # Apenas para testar a atualização da matriz
+    matriz_jogo = [[0, 0, 2],
+                   [2, 1, 2],
+                   [2, 0, 1]]
+
+    # Chamada da função para desenhar as jogadas
+    desenhar_jogada()
+    pygame.display.flip()
+
+    if(contador%2==0):
+        matriz_jogo[0][0] = 1
+    else:
+        matriz_jogo[0][0] = 2
+    contador += 1
+    time.sleep(1)
+
+    desenhar_jogada()
+    pygame.display.flip()
+    time.sleep(1)
+
+    # Verifica quem ganhou
+    if verificar_vencedor(1) == 1:   # X ganhou
+        exibir_vencedor("X")
+        matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        continue
+    elif verificar_vencedor(2) == 2: # O ganhou
+        exibir_vencedor("O")
+        matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        continue
+    
+pygame.quit()
