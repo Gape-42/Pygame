@@ -95,9 +95,21 @@ def verificar_vencedor(jogador):
         return jogador
 
 
+# Função para verificar empate
+def verificar_empate():
+    for linha in matriz_jogo:
+        if 0 in linha:
+            return False
+    return True
+
+
+# Exibe tela de quem ganhou ou empate
 def exibir_vencedor(vencedor):
     fonte = pygame.font.SysFont(None, 72)
-    texto_vencedor = fonte.render(f'Jogador {vencedor} venceu!', True, "white")
+    if vencedor == 0:
+        texto_vencedor = fonte.render('Empate!', True, "white")
+    else:
+        texto_vencedor = fonte.render(f'Jogador {vencedor} venceu!', True, "white")
 
     # Dimensões da caixa
     largura_modal = 500
@@ -170,6 +182,7 @@ def exibir_vencedor(vencedor):
 # Apenas para teste
 contador = 0
 
+# Loop principal
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -182,10 +195,11 @@ while running:
     desenhar_jogada()
     pygame.display.flip()
                 
+    # ------------------- Inicio dos Algoritmos de busca -------------------
     # Apenas para testar a atualização da matriz
-    matriz_jogo = [[0, 0, 2],
-                   [2, 1, 2],
-                   [2, 0, 1]]
+    matriz_jogo = [[0, 2, 1],
+                   [1, 1, 2],
+                   [2, 1, 2]]
 
     # Chamada da função para desenhar as jogadas
     desenhar_jogada()
@@ -196,19 +210,27 @@ while running:
     else:
         matriz_jogo[0][0] = 2
     contador += 1
-    time.sleep(1)
+    # -------------------- Fim dos Algoritmos de busca --------------------
 
+    time.sleep(1)
     desenhar_jogada()
     pygame.display.flip()
+    clock.tick(60)
     time.sleep(1)
 
     # Verifica quem ganhou
     if verificar_vencedor(1) == 1:   # X ganhou
-        exibir_vencedor("X")
+        exibir_vencedor(1)
         matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         continue
+
     elif verificar_vencedor(2) == 2: # O ganhou
-        exibir_vencedor("O")
+        exibir_vencedor(2)
+        matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        continue
+
+    elif verificar_empate():         # Empate
+        exibir_vencedor(0)
         matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         continue
     
