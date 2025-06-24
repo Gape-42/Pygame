@@ -1,3 +1,4 @@
+# Bibliotecas
 import pygame
 import time
 
@@ -8,6 +9,10 @@ import time
 matriz_jogo = [[0, 0, 0],
                [0, 0, 0],
                [0, 0, 0]]
+
+# Variáveis para as pontuações dos jogadores
+pontuacao_jogador1 = 0
+pontuacao_jogador2 = 0
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -60,6 +65,17 @@ def desenhar_jogada():
                                                 (centro_x + meia_largura_xis, centro_y + meia_largura_xis), 15)
                 pygame.draw.line(tela, "forestgreen", (centro_x + meia_largura_xis, centro_y - meia_largura_xis),
                                                 (centro_x -  meia_largura_xis, centro_y + meia_largura_xis), 5)
+
+
+# Função para exibir a ponyuação de cada jogador
+def exibir_pontuacao(p1, p2):
+    fonte = pygame.font.SysFont(None, 48)
+    texto_p1 = fonte.render(f"Jogador 1 (X): {p1}", True, "white")
+    texto_p2 = fonte.render(f"Jogador 2 (O): {p2}", True, "white")
+
+    # Posição dos textos
+    tela.blit(texto_p1, (20, 20))
+    tela.blit(texto_p2, (20, 80))
 
 
 # Função para a verificação de vitória
@@ -145,6 +161,7 @@ def exibir_vencedor(vencedor):
         # Desenha o tabuleiro por trás
         desenhar_tabuleiro()
         desenhar_jogada()
+        exibir_pontuacao(pontuacao_jogador1, pontuacao_jogador2)
 
         # Modal
         pygame.draw.rect(tela, "gray10", modal_rect, border_radius=20)
@@ -193,6 +210,7 @@ while running:
     
     # Chamada da função para desenhar as jogadas
     desenhar_jogada()
+    exibir_pontuacao(pontuacao_jogador1, pontuacao_jogador2)
     pygame.display.flip()
                 
     # ------------------- Inicio dos Algoritmos de busca -------------------
@@ -220,16 +238,20 @@ while running:
 
     # Verifica quem ganhou
     if verificar_vencedor(1) == 1:   # X ganhou
+        pontuacao_jogador1 += 2
         exibir_vencedor(1)
         matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         continue
 
     elif verificar_vencedor(2) == 2: # O ganhou
+        pontuacao_jogador2 += 2
         exibir_vencedor(2)
         matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         continue
 
     elif verificar_empate():         # Empate
+        pontuacao_jogador1 += 1
+        pontuacao_jogador2 += 1
         exibir_vencedor(0)
         matriz_jogo = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         continue
